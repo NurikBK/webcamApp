@@ -5,6 +5,7 @@ import Webcam from 'react-webcam';
 import CameraIcon from './CameraIcon';
 
 const CustomWebcam = () => {
+  const [cameraPermission, setCameraPermission] = useState('prompt');
   const [mirrored, setMirrored] = useState(false);
   const webcamRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null);
@@ -22,6 +23,13 @@ const CustomWebcam = () => {
     setImgSrc(null);
     setWatermarkedImgSrc(null);
   };
+
+  useEffect(() => {
+    // Check camera permission status when the component mounts
+    navigator.permissions.query({ name: 'camera' }).then((permissionStatus) => {
+      setCameraPermission(permissionStatus.state);
+    });
+  }, []);
 
   const addWatermark = (imageSrc) => {
     // Create a new Image object
