@@ -94,7 +94,7 @@ const CustomWebcam = () => {
           mirrored={mirrored}
           screenshotFormat="image/jpeg"
           screenshotQuality={1}
-          // videoConstraints={videoConstraints}
+          videoConstraints={videoConstraints}
         />
       )}
       <div className="btn-container">
