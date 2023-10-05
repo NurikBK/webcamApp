@@ -25,10 +25,10 @@ const CustomWebcam = () => {
   };
 
   useEffect(() => {
-    // Check camera permission status when the component mounts
-    navigator.permissions.query({ name: 'camera' }).then((permissionStatus) => {
-      setCameraPermission(permissionStatus.state);
-    });
+    const storedPermission = localStorage.getItem('cameraPermission');
+    if (storedPermission === 'granted') {
+      setCameraPermission('granted');
+    }
   }, []);
 
   const addWatermark = (imageSrc) => {
@@ -87,23 +87,63 @@ const CustomWebcam = () => {
       //   });
     }
   };
+  const requestCameraPermission = async () => {
+    try {
+      const permissionStatus = await navigator.permissions.query({
+        name: 'camera',
+      });
+
+      if (permissionStatus.state === 'prompt') {
+        const result = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+
+        if (result) {
+          // Permission granted, set it as 'granted' and store it in local storage
+          localStorage.setItem('cameraPermission', 'granted');
+          setCameraPermission('granted');
+        } else {
+          // Permission denied by the user
+          localStorage.setItem('cameraPermission', 'denied');
+          setCameraPermission('denied');
+        }
+      }
+    } catch (error) {
+      // Handle any errors here
+      console.error('Error requesting camera permission:', error);
+    }
+  };
 
   return (
     <div className="container">
-      {watermarkedImgSrc ? (
-        <div className="imageContainer">
-          <img src={watermarkedImgSrc} alt="webcam" />
-        </div>
+      {cameraPermission === 'granted' ? (
+        // Render webcam component only if camera permission is granted
+        watermarkedImgSrc ? (
+          <div className="imageContainer">
+            <img src={watermarkedImgSrc} alt="webcam" />
+          </div>
+        ) : (
+          <Webcam
+            height={400}
+            width={300}
+            ref={webcamRef}
+            mirrored={mirrored}
+            screenshotFormat="image/jpeg"
+            screenshotQuality={1}
+          />
+        )
       ) : (
-        <Webcam
-          height={300}
-          width={300}
-          ref={webcamRef}
-          mirrored={mirrored}
-          screenshotFormat="image/jpeg"
-          screenshotQuality={1}
-          // videoConstraints={videoConstraints}
-        />
+        // Display a message or guide the user if permission is denied or not set
+        <div className="cameraPermissionMessage">
+          {cameraPermission === 'denied' ? (
+            <p>
+              Camera access is denied. Please enable it in browser settings.
+            </p>
+          ) : (
+            <p>Allow camera access to use this feature.</p>
+          )}
+          <button onClick={requestCameraPermission}>Grant Camera Access</button>
+        </div>
       )}
       <div className="btn-container">
         {watermarkedImgSrc ? (
