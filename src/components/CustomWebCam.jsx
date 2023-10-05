@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useCallback } from "react";
 import { useRef } from "react";
 import Webcam from "react-webcam";
+import CameraIcon from "./CameraIcon";
 
 const CustomWebcam = () => {
-  const [mirrored, setMirrored] = useState(false);
+  const [mirrored, setMirrored] = useState(true);
   const webcamRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null);
   const capture = useCallback(() => {
@@ -14,25 +15,29 @@ const CustomWebcam = () => {
   const retake = () => {
     setImgSrc(null);
   };
+  const videoConstraints = {
+      facingMode: { exact: "environment" }
+    };
   return (
     <div className="container">
     {imgSrc ? (
       <img src={imgSrc} alt="webcam" />
     ) : (
       <Webcam
-          height={600}
-          width={600}
+          height={400}
+          width={300}
           ref={webcamRef}
           mirrored={mirrored}
           screenshotFormat="image/jpeg"
           screenshotQuality={0.8}
+          videoConstraints={videoConstraints}
         />
     )}
     <div className="btn-container">
       {imgSrc ? (
-        <button onClick={retake}>Retake photo</button>
+        <button onClick={retake}>Переснять</button>
       ) : (
-        <button onClick={capture}>Capture photo</button>
+        <button onClick={capture}>Снять фото</button>
       )}
     </div>
   </div>

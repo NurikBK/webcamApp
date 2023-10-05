@@ -1,8 +1,7 @@
 .App {
   display: flex;
   justify-content: center;
-  padding: 128px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .container {
