@@ -16,6 +16,16 @@ video {
   overflow: hidden;
 }
 
+.imageContainer {
+  position: relative;
+}
+
+.waterMark {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .controls {
   display: flex;
   gap: 16px;
