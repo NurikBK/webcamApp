@@ -5,7 +5,7 @@ import Webcam from 'react-webcam';
 import CameraIcon from './CameraIcon';
 
 const CustomWebcam = () => {
-  const [cameraPermission, setCameraPermission] = useState('prompt');
+  const [cameraPermission, setCameraPermission] = useState('granted');
   const [mirrored, setMirrored] = useState(false);
   const webcamRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null);
