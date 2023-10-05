@@ -29,7 +29,7 @@ const CustomWebcam = () => {
           ref={webcamRef}
           mirrored={mirrored}
           screenshotFormat="image/jpeg"
-          screenshotQuality={0.8}
+          screenshotQuality={1}
           videoConstraints={videoConstraints}
         />
     )}
